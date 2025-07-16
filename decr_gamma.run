@@ -1,0 +1,34 @@
+reset;
+
+model decr_gamma.mod;
+data decr_gamma.dat;
+
+option solver ipopt;
+
+solve;
+
+display Expected_Utility;
+display w;
+
+printf "\n*** Allocation for asset and node ***\n";
+for {n in NODES} {
+  printf "\nNodo %s (stage = %d, prob = %.4f, gamma = %.6f, Wealth = %.2f):\n", 
+         n, stage[n], prob[n], gamma[stage[n]], w[n];
+  for {a in A} {
+    printf "  %s: %10.2f\n", a, x[a,n];
+  }
+}
+
+printf "Nodo,Stage,Probability,Gamma,Wealth" > "decr_gamma.csv";
+for {a in A} {
+  printf ",%s", a >> "decr_gamma.csv";
+}
+printf "\n" >> "decr_gamma.csv";
+
+for {n in NODES} {
+  printf "%s,%d,%.4f,%.6f,%.2f", n, stage[n], prob[n], gamma[stage[n]], w[n] >> "decr_gamma.csv";
+  for {a in A} {
+    printf ",%.6f", x[a,n] >> "decr_gamma.csv";
+  }
+  printf "\n" >> "decr_gamma.csv";
+}

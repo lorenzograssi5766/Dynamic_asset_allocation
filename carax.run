@@ -1,0 +1,27 @@
+reset;
+
+model cara.mod;
+data cara.dat;
+
+set G := {1, 1.5, 2, 3, 4, 5, 6};
+
+# right the header
+printf "Nodo,Stage,Probability,Gamma,Wealth,stock1,stock2,bond,money\n" > "cara_gamma_all.csv";
+
+for {g in G} {
+  let gamma := g;
+
+  option solver ipopt;
+  solve;
+
+  # append the data to the csv file 
+  for {n in NODES} {
+    printf "%s,%d,%.4f,%.6f,%.2f", n, stage[n], prob[n], gamma, w[n] >> "cara_gamma_all.csv";
+    for {a in A} {
+      printf ",%.6f", x[a,n] >> "cara_gamma_all.csv";
+    }
+    printf "\n" >> "cara_gamma_all.csv";
+  }
+}
+
+

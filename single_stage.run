@@ -1,0 +1,25 @@
+reset;
+
+model single_stage.mod;
+data single_stage.dat;
+
+# Write CSV header
+print "targetR,variance,stock1,stock2,bonds,mm" > "results_single_stage.csv";
+
+# Set solver
+option solver cplex;
+
+# Loop through targetR values from 0.030 to 0.090 (step = 0.001)
+for {t in 30..90 by 1} {
+    let targetR := t / 1000;
+    solve;
+    printf "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f\n",
+        targetR,
+        variance,
+        x["stock1"],
+        x["stock2"],
+        x["bonds"],
+        x["mm"] >> "results_single_stage.csv";
+}
+
+

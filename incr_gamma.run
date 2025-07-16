@@ -1,0 +1,39 @@
+reset;
+
+### Carica modello e dati
+model incr_gamma.mod;
+data incr_gamma.dat;
+
+### Imposta solver
+option solver ipopt;
+
+### Risolvi
+solve;
+
+### Stampa a video
+display Expected_Utility;
+display w;
+
+printf "\n*** Allocazioni per asset e nodo ***\n";
+for {n in NODES} {
+  printf "\nNodo %s (stage = %d, prob = %.4f, gamma = %.6f, Wealth = %.2f):\n", 
+         n, stage[n], prob[n], gamma[stage[n]], w[n];
+  for {a in A} {
+    printf "  %s: %10.2f\n", a, x[a,n];
+  }
+}
+
+### Scrivi su file CSV
+printf "Nodo,Stage,Probability,Gamma,Wealth" > "incr_gamma.csv";
+for {a in A} {
+  printf ",%s", a >> "incr_gamma.csv";
+}
+printf "\n" >> "incr_gamma.csv";
+
+for {n in NODES} {
+  printf "%s,%d,%.4f,%.6f,%.2f", n, stage[n], prob[n], gamma[stage[n]], w[n] >> "incr_gamma.csv";
+  for {a in A} {
+    printf ",%.6f", x[a,n] >> "incr_gamma.csv";
+  }
+  printf "\n" >> "incr_gamma.csv";
+}

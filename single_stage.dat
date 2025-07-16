@@ -1,0 +1,31 @@
+data;
+
+set INSTR := stock1 stock2 bonds mm;
+          
+
+param rateofreturn :=
+          stock1  0.09
+          stock2  0.07
+          bonds   0.04
+          mm      0.02;
+
+param covariancematrix : stock1 stock2 bonds mm :=
+          stock1  0.0225  0.0066   0.0015   0.00015 
+          stock2  0.0066  0.0121   0.00055  0.00011 
+          bonds   0.0015  0.00055  0.0025   0.00015 
+          mm      0.00015 0.00011  0.00015  0.0001 
+
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
